@@ -6,42 +6,57 @@ let add_order = (order_id, product_id, quantity, total_price, fname, lname, stre
     [order_id, product_id, quantity, total_price, fname, lname, street_address, town, state, phone, exphone, email, notes], 
     function(err) {
         if (err) {
-            return console.error(err.message);
+            console.error(err.message);
+            return { success: false, message: err.message };
         }
         console.log(`A row has been inserted with rowid ${this.lastID}`);
+        return { success: true, message: `A row has been inserted with rowid ${this.lastID}` };
     });
 }
 
 
 let get_all_orders = () => {
-    db.all("SELECT * FROM Orders;", [], (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        console.log(rows);
-        return rows;
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Orders;", [], (err, rows) => {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+            } else {
+                console.log(rows);
+                resolve(rows);
+            }
+        });
     });
 }
 
 
 
 let get_order_by_id = (order_id) => {
-    db.all("SELECT * FROM Orders WHERE order_id = ?;", [order_id], (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        console.log(rows);
-        return rows;
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Orders WHERE order_id = ?;", [order_id], (err, rows) => {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+            } else {
+                console.log(rows);
+                resolve(rows);
+            }
+        });
     });
 }
 
 
 let delete_order_by_id = (order_id) => {
-    db.run("DELETE FROM Orders WHERE order_id = ?;", [order_id], function(err) {
-        if (err) {
-            return console.error(err.message);
-        }
-        console.log('Order deleted successfully');
+    return new Promise((resolve, reject) => {
+        db.run("DELETE FROM Orders WHERE order_id = ?;", [order_id], function(err) {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+            } else {
+                console.log('Order deleted successfully');
+                resolve({ success: true, message: 'Order deleted successfully' });
+            }
+        });
     });
 }
 
