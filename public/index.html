@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Functions</title>
+    <script>
+        async function fetchOrders() {
+            const response = await fetch('/api/orders');
+            const orders = await response.json();
+            console.log('Orders:', orders);
+            document.getElementById('orders').innerText = JSON.stringify(orders, null, 2);
+        }
+
+        async function fetchOrderById() {
+            const orderId = document.getElementById('order-id').value;
+            const response = await fetch(`/api/orders/${orderId}`);
+            const order = await response.json();
+            console.log('Order:', order);
+            document.getElementById('order').innerText = JSON.stringify(order, null, 2);
+        }
+
+        async function fetchProductsByCategory() {
+            const response = await fetch('/api/products-by-category');
+            const products = await response.json();
+            console.log('Products by Category:', products);
+            document.getElementById('products').innerText = JSON.stringify(products, null, 2);
+        }
+
+        async function addOrder() {
+            const order = {
+                order_id: document.getElementById('add-order-id').value,
+                product_id: document.getElementById('add-product-id').value,
+                quantity: document.getElementById('add-quantity').value,
+                total_price: document.getElementById('add-total-price').value,
+                fname: document.getElementById('add-fname').value,
+                lname: document.getElementById('add-lname').value,
+                street_address: document.getElementById('add-street-address').value,
+                town: document.getElementById('add-town').value,
+                state: document.getElementById('add-state').value,
+                phone: document.getElementById('add-phone').value,
+                exphone: document.getElementById('add-exphone').value,
+                email: document.getElementById('add-email').value,
+                notes: document.getElementById('add-notes').value
+            };
+
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(order)
+            });
+            const result = await response.json();
+            console.log('Add Order Result:', result);
+        }
+
+        async function deleteOrder() {
+            const orderId = document.getElementById('delete-order-id').value;
+            const response = await fetch(`/api/orders/${orderId}`, {
+                method: 'DELETE'
+            });
+            const result = await response.json();
+            console.log('Delete Order Result:', result);
+        }
+    </script>
+</head>
+<body>
+    <h1>Test Functions</h1>
+    
+    <button onclick="fetchOrders()">Fetch All Orders</button>
+    <pre id="orders"></pre>
+    
+    <h2>Fetch Order By ID</h2>
+    <input type="text" id="order-id" placeholder="Order ID">
+    <button onclick="fetchOrderById()">Fetch Order</button>
+    <pre id="order"></pre>
+    
+    <h2>Fetch Products By Category</h2>
+    <button onclick="fetchProductsByCategory()">Fetch Products</button>
+    <pre id="products"></pre>
+    
+    <h2>Add Order</h2>
+    <input type="text" id="add-order-id" placeholder="Order ID">
+    <input type="text" id="add-product-id" placeholder="Product ID">
+    <input type="text" id="add-quantity" placeholder="Quantity">
+    <input type="text" id="add-total-price" placeholder="Total Price">
+    <input type="text" id="add-fname" placeholder="First Name">
+    <input type="text" id="add-lname" placeholder="Last Name">
+    <input type="text" id="add-street-address" placeholder="Street Address">
+    <input type="text" id="add-town" placeholder="Town">
+    <input type="text" id="add-state" placeholder="State">
+    <input type="text" id="add-phone" placeholder="Phone">
+    <input type="text" id="add-exphone" placeholder="Extra Phone">
+    <input type="text" id="add-email" placeholder="Email">
+    <input type="text" id="add-notes" placeholder="Notes">
+    <button onclick="addOrder()">Add Order</button>
+    
+    <h2>Delete Order</h2>
+    <input type="text" id="delete-order-id" placeholder="Order ID">
+    <button onclick="deleteOrder()">Delete Order</button>
+</body>
+</html>
