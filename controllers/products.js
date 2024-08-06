@@ -97,7 +97,7 @@ let get_products_by_category = () => {
 
 
 
-module.exports = {add_product , get_all_products , get_product_by_name}
+module.exports = {add_product , get_all_products , get_product_by_name , delete_product_by_name , get_products_by_category}
 
 
 //add_product(125 , "/img/125.png" , "herbela" , 12 , "haircutting " , "cosmatics" , 12)
