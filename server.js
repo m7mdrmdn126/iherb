@@ -10,8 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-
-// API endpoints
+// Orders API endpoints
 app.get('/api/orders', async (req, res) => {
     try {
         const orders = await ordersController.get_all_orders();
@@ -45,6 +44,7 @@ app.delete('/api/orders/:id', async (req, res) => {
     }
 });
 
+// Products API endpoints
 app.get('/api/products', async (req, res) => {
     try {
         const products = await productsController.get_all_products();
@@ -87,8 +87,6 @@ app.get('/api/products-by-category', async (req, res) => {
     }
 });
 
-
-
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}`);
 });
