@@ -47,6 +47,18 @@ let delete_order_by_id = (order_id) => {
 
 
 
+let get_catogries = () => {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT DISTINCT Category_name FROM Products", [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows.map(row => row.Category_name));
+            }
+        });
+    });
+};
+
 
 
 
