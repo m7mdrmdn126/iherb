@@ -52,6 +52,49 @@ let delete_product_by_name = (name) => {
     });
 }
 
+let get_catogries = () => {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT DISTINCT Category_name FROM Products", [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows.map(row => row.Category_name));
+            }
+        });
+    });
+};
+
+
+let get_products_by_category = () => {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT product_img, product_name, Quantity, Description, Price FROM Products ORDER BY Category_name;", [], (err, rows) => {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+            } else {
+                // Group the products by category
+                const result = rows.reduce((acc, row) => {
+                    if (!acc[row.Category_name]) {
+                        acc[row.Category_name] = [];
+                    }
+                    acc[row.Category_name].push({
+                        product_img: row.product_img,
+                        product_name: row.product_name,
+                        Quantity: row.Quantity,
+                        Description: row.Description,
+                        Price: row.Price
+                    });
+                    return acc;
+                }, {});
+                console.log(result);
+                resolve(result);
+            }
+        });
+    });
+}
+
+
+
 
 
 module.exports = {add_product , get_all_products , get_product_by_name}
