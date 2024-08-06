@@ -63,6 +63,28 @@
             const result = await response.json();
             console.log('Delete Order Result:', result);
         }
+
+        async function addProduct() {
+            const product = {
+                id: document.getElementById('add-product-id').value,
+                img_path: document.getElementById('add-product-img').value,
+                name: document.getElementById('add-product-name').value,
+                quantity: document.getElementById('add-product-quantity').value,
+                description: document.getElementById('add-product-description').value,
+                category: document.getElementById('add-product-category').value,
+                price: document.getElementById('add-product-price').value
+            };
+
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(product)
+            });
+            const result = await response.json();
+            console.log('Add Product Result:', result);
+        }
     </script>
 </head>
 <body>
@@ -99,5 +121,15 @@
     <h2>Delete Order</h2>
     <input type="text" id="delete-order-id" placeholder="Order ID">
     <button onclick="deleteOrder()">Delete Order</button>
+    
+    <h2>Add Product</h2>
+    <input type="text" id="add-product-id" placeholder="Product ID">
+    <input type="text" id="add-product-img" placeholder="Product Image Path">
+    <input type="text" id="add-product-name" placeholder="Product Name">
+    <input type="text" id="add-product-quantity" placeholder="Quantity">
+    <input type="text" id="add-product-description" placeholder="Description">
+    <input type="text" id="add-product-category" placeholder="Category">
+    <input type="text" id="add-product-price" placeholder="Price">
+    <button onclick="addProduct()">Add Product</button>
 </body>
 </html>
