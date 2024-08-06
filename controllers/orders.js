@@ -112,7 +112,9 @@ module.exports = {
     add_order,
     get_all_orders,
     get_order_by_id,
-    delete_order_by_id
+    delete_order_by_id,
+    get_catogries,
+    get_products_by_category
 };
 
 
