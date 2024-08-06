@@ -1,12 +1,7 @@
-db = require('../db/db.js')
+const db = require('../db/db.js');
 
-
-
-// function to add products ya 3am mazen 
-
-let add_product = (id , img_path , name , quantity , description , category , price ) => {
-
-    db.run(`INSERT INTO products (product_id, product_img , product_name , Quantity ,  Description , Category_name , price) VALUES (?, ? ,? ,?, ? ,?, ?)`, [id , img_path , name , quantity , description , category , price], function(err) {
+let add_product = (id, img_path, name, quantity, description, category, price) => {
+    db.run(`INSERT INTO products (product_id, product_img, product_name, Quantity, Description, Category_name, price) VALUES (?, ?, ?, ?, ?, ?, ?)`, [id, img_path, name, quantity, description, category, price], function(err) {
         if (err) {
             return console.error(err.message);
         }
@@ -14,45 +9,46 @@ let add_product = (id , img_path , name , quantity , description , category , pr
     });
 }
 
-
-// a function to get all products ya 3am mazen  bt return all the rows as an array wenta et3amel
-
 let get_all_products = () => {
-    db.all("select * from products ;", [], (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        console.log(rows);
-        return rows
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM products;", [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log(rows);
+                resolve(rows);
+            }
+        });
     });
-    
 }
-
-
-
 
 let get_product_by_name = (name) => {
-    db.all("select * from products where product_name = ?;", [name], (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        console.log(rows);
-        return rows
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM products WHERE product_name = ?;", [name], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log(rows);
+                resolve(rows);
+            }
+        });
     });
 }
-
-
 
 let delete_product_by_name = (name) => {
-    db.all("delete from products where product_name = ?;", [name], (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        console.log('Product deleted successfully'); 
+    return new Promise((resolve, reject) => {
+        db.run("DELETE FROM products WHERE product_name = ?;", [name], function(err) {
+            if (err) {
+                reject(err);
+            } else {
+                console.log('Product deleted successfully');
+                resolve({ success: true, message: 'Product deleted successfully' });
+            }
+        });
     });
 }
 
-let get_catogries = () => {
+let get_categories = () => {
     return new Promise((resolve, reject) => {
         db.all("SELECT DISTINCT Category_name FROM Products", [], (err, rows) => {
             if (err) {
@@ -64,15 +60,13 @@ let get_catogries = () => {
     });
 };
 
-
 let get_products_by_category = () => {
     return new Promise((resolve, reject) => {
-        db.all("SELECT product_img, product_name, Quantity, Description, Price FROM Products ORDER BY Category_name;", [], (err, rows) => {
+        db.all("SELECT product_img, product_name, Quantity, Description, Price, Category_name FROM Products ORDER BY Category_name;", [], (err, rows) => {
             if (err) {
                 console.error(err.message);
                 reject(err);
             } else {
-                // Group the products by category
                 const result = rows.reduce((acc, row) => {
                     if (!acc[row.Category_name]) {
                         acc[row.Category_name] = [];
@@ -93,14 +87,11 @@ let get_products_by_category = () => {
     });
 }
 
-
-
-
-
-module.exports = {add_product , get_all_products , get_product_by_name , delete_product_by_name , get_products_by_category}
-
-
-//add_product(125 , "/img/125.png" , "herbela" , 12 , "haircutting " , "cosmatics" , 12)
-//get_products()
-//get_product_by_name("hfh")
-//delete_product_by_name("hfh")
+module.exports = {
+    add_product,
+    get_all_products,
+    get_product_by_name,
+    delete_product_by_name,
+    get_categories,
+    get_products_by_category
+};
