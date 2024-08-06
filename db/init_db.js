@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 
-let db = new sqlite3.Database('C:\Users\mazen\OneDrive\Desktop\IHerb\IHerb\iherb\db\iherb.db', (err) => {
+let db = new sqlite3.Database('C:/Users/mazen/OneDrive/Desktop/IHerb/IHerb/iherb/db/iherb.db', (err) => {
     if (err) {
         console.error(err.message);
         throw err;
