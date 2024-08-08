@@ -3,133 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Functions</title>
-    <script>
-        async function fetchOrders() {
-            const response = await fetch('/api/orders');
-            const orders = await response.json();
-            console.log('Orders:', orders);
-            document.getElementById('orders').innerText = JSON.stringify(orders, null, 2);
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
         }
-
-        async function fetchOrderById() {
-            const orderId = document.getElementById('order-id').value;
-            const response = await fetch(`/api/orders/${orderId}`);
-            const order = await response.json();
-            console.log('Order:', order);
-            document.getElementById('order').innerText = JSON.stringify(order, null, 2);
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
         }
-
-        async function fetchProductsByCategory() {
-            const response = await fetch('/api/products-by-category');
-            const products = await response.json();
-            console.log('Products by Category:', products);
-            document.getElementById('products').innerText = JSON.stringify(products, null, 2);
+        .form-group {
+            margin-bottom: 15px;
         }
-
-        async function addOrder() {
-            const order = {
-                order_id: document.getElementById('add-order-id').value,
-                product_id: document.getElementById('add-product-id').value,
-                quantity: document.getElementById('add-quantity').value,
-                total_price: document.getElementById('add-total-price').value,
-                fname: document.getElementById('add-fname').value,
-                lname: document.getElementById('add-lname').value,
-                street_address: document.getElementById('add-street-address').value,
-                town: document.getElementById('add-town').value,
-                state: document.getElementById('add-state').value,
-                phone: document.getElementById('add-phone').value,
-                exphone: document.getElementById('add-exphone').value,
-                email: document.getElementById('add-email').value,
-                notes: document.getElementById('add-notes').value
-            };
-
-            const response = await fetch('/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(order)
-            });
-            const result = await response.json();
-            console.log('Add Order Result:', result);
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
         }
-
-        async function deleteOrder() {
-            const orderId = document.getElementById('delete-order-id').value;
-            const response = await fetch(`/api/orders/${orderId}`, {
-                method: 'DELETE'
-            });
-            const result = await response.json();
-            console.log('Delete Order Result:', result);
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
         }
-
-        async function addProduct() {
-            const product = {
-                id: document.getElementById('add-product-id').value,
-                img_path: document.getElementById('add-product-img').value,
-                name: document.getElementById('add-product-name').value,
-                quantity: document.getElementById('add-product-quantity').value,
-                description: document.getElementById('add-product-description').value,
-                category: document.getElementById('add-product-category').value,
-                price: document.getElementById('add-product-price').value
-            };
-
-            const response = await fetch('/api/products', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(product)
-            });
-            const result = await response.json();
-            console.log('Add Product Result:', result);
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
-    </script>
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Test Functions</h1>
-    
-    <button onclick="fetchOrders()">Fetch All Orders</button>
-    <pre id="orders"></pre>
-    
-    <h2>Fetch Order By ID</h2>
-    <input type="text" id="order-id" placeholder="Order ID">
-    <button onclick="fetchOrderById()">Fetch Order</button>
-    <pre id="order"></pre>
-    
-    <h2>Fetch Products By Category</h2>
-    <button onclick="fetchProductsByCategory()">Fetch Products</button>
-    <pre id="products"></pre>
-    
-    <h2>Add Order</h2>
-    <input type="text" id="add-order-id" placeholder="Order ID">
-    <input type="text" id="add-product-id" placeholder="Product ID">
-    <input type="text" id="add-quantity" placeholder="Quantity">
-    <input type="text" id="add-total-price" placeholder="Total Price">
-    <input type="text" id="add-fname" placeholder="First Name">
-    <input type="text" id="add-lname" placeholder="Last Name">
-    <input type="text" id="add-street-address" placeholder="Street Address">
-    <input type="text" id="add-town" placeholder="Town">
-    <input type="text" id="add-state" placeholder="State">
-    <input type="text" id="add-phone" placeholder="Phone">
-    <input type="text" id="add-exphone" placeholder="Extra Phone">
-    <input type="text" id="add-email" placeholder="Email">
-    <input type="text" id="add-notes" placeholder="Notes">
-    <button onclick="addOrder()">Add Order</button>
-    
-    <h2>Delete Order</h2>
-    <input type="text" id="delete-order-id" placeholder="Order ID">
-    <button onclick="deleteOrder()">Delete Order</button>
-    
-    <h2>Add Product</h2>
-    <input type="text" id="add-product-id" placeholder="Product ID">
-    <input type="text" id="add-product-img" placeholder="Product Image Path">
-    <input type="text" id="add-product-name" placeholder="Product Name">
-    <input type="text" id="add-product-quantity" placeholder="Quantity">
-    <input type="text" id="add-product-description" placeholder="Description">
-    <input type="text" id="add-product-category" placeholder="Category">
-    <input type="text" id="add-product-price" placeholder="Price">
-    <button onclick="addProduct()">Add Product</button>
+    <h1>Add Product</h1>
+    <div class="form-container">
+        <form id="addProductForm">
+            <div class="form-group">
+                <label for="id">Product ID:</label>
+                <input type="number" id="id" name="id" required>
+            </div>
+            <div class="form-group">
+                <label for="img_path">Image Path:</label>
+                <input type="text" id="img_path" name="img_path" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Product Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" step="0.01" id="price" name="price" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Add Product</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('addProductForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('id').value;
+            const img_path = document.getElementById('img_path').value;
+            const name = document.getElementById('name').value;
+            const quantity = document.getElementById('quantity').value;
+            const description = document.getElementById('description').value;
+            const category = document.getElementById('category').value;
+            const price = document.getElementById('price').value;
+
+            const response = await fetch('/api/add-product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id,
+                    img_path,
+                    name,
+                    quantity,
+                    description,
+                    category,
+                    price
+                })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Product added successfully!');
+                document.getElementById('addProductForm').reset();
+            } else {
+                alert('Error adding product: ' + result.message);
+            }
+        });
+    </script>
 </body>
 </html>
